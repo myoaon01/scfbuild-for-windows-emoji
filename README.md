@@ -125,3 +125,20 @@ although none support color fonts at this time:
 
 SCFBuild is released under the GNU General Public License v3.
 See [LICENSE.txt](LICENSE.txt) in the project root directory.
+
+# 수정한 부분
+
+### fforge.py
+1. import 추가 (17번 줄)
+KEYCAP_INT와 KEYCAP_SEQUENCES를 unicode.py에서 가져오도록 추가.
+2. create_font() — KEYCAP 글리프 width=0으로 생성 (63~64번 줄)
+ZWJ, VS16과 동일하게 U+20E3 글리프를 폭 0으로 등록.
+3. add_glyphs() — 두 가지 추가
+   
+   + KEYCAP_SEQUENCES 치환 로직: 31-fe0f-20e3.svg 같은 파일을 처리할 때 VS16 포함 정규 시퀀스로 변환
+   +  KEYCAP_INT 제거 서브스티튜션: VS16 처리처럼, VS16 + KEYCAP을 제거한 축약 시퀀스도 리거처에 추가 (예: '1' 단독으로 입력해도 키캡으로 렌더링)
+
+### unicode.py
+* 기존 ZWJ, VS16과 같은 방식으로 KEYCAP / KEYCAP_INT 상수를 추가
+* KEYCAP_SEQUENCES 딕셔너리 신규 추가: ZWJ_SEQUENCES와 동일한 구조로, VS16 없는 입력 → VS16 포함 정규 시퀀스로 매핑
+(0️⃣~9️⃣ 숫자 10개와 #️⃣, *️⃣ 특수문자 2개, 총 12개 키캡을 포함)
