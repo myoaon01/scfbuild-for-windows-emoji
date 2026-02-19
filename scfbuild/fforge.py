@@ -14,7 +14,7 @@ import sys
 
 from . import util
 from .util import FONT_EM, DEFAULT_GLYPH_WIDTH
-from .unicode import ZWJ_INT, VS16_INT, ZWJ_SEQUENCES
+from .unicode import ZWJ_INT, VS16_INT, ZWJ_SEQUENCES, KEYCAP_INT, KEYCAP_SEQUENCES
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +60,8 @@ def create_font(conf):
     glyph.width = 0
     glyph = font.createChar(VS16_INT)
     glyph.width = 0
+    glyph = font.createChar(KEYCAP_INT)
+    glyph.width = 0
 
     return font
 
@@ -99,6 +101,13 @@ def add_glyphs(font, svg_filepaths, conf):
             except KeyError:
                 pass
 
+            # Replace keycap sequences with correct VS16 versions as needed
+            try:
+                u_str = KEYCAP_SEQUENCES[u_str]
+                u_ids = map(ord, u_str)
+            except KeyError:
+                pass
+
             # Create a tuple of glyph names
             liga_glyphs = tuple(map(fontforge.nameFromUnicode, u_ids))
             # Add the new ligature to the glyph
@@ -108,6 +117,13 @@ def add_glyphs(font, svg_filepaths, conf):
             if VS16_INT in u_ids:
                 # Create a list of IDs without the emoji variation selector.
                 u_ids = [u_id for u_id in u_ids if u_id != VS16_INT]
+                liga_glyphs = tuple(map(fontforge.nameFromUnicode, u_ids))
+                glyph.addPosSub('liga', liga_glyphs)
+                logger.debug("Adding substitution %s", liga_glyphs)
+
+            if KEYCAP_INT in u_ids:
+                # Create a list of IDs without the keycap and variation selector.
+                u_ids = [u_id for u_id in u_ids if u_id not in (VS16_INT, KEYCAP_INT)]
                 liga_glyphs = tuple(map(fontforge.nameFromUnicode, u_ids))
                 glyph.addPosSub('liga', liga_glyphs)
                 logger.debug("Adding substitution %s", liga_glyphs)

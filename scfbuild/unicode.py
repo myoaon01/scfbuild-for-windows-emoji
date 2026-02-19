@@ -11,6 +11,9 @@ ZWJ = '\u200d'
 # VARIATION SELECTOR-16 - Used as emoji variation selector.
 VS16_INT = 0xfe0f
 VS16 = '\ufe0f'
+# COMBINING ENCLOSING KEYCAP - Used to create keycap emoji.
+KEYCAP_INT = 0x20e3
+KEYCAP = '\u20e3'
 
 # A list of all ZWJ indexed by the no ZJW/EVS sequence.
 # Details: http://unicode.org/emoji/charts/emoji-zwj-sequences.html
@@ -64,4 +67,25 @@ ZWJ_SEQUENCES = {
     "\U0001f469\U0001f469\U0001f467\U0001f467": "\U0001f469\u200d\U0001f469\u200d\U0001f467\u200d\U0001f467",
     # eye, left speech bubble: 👁‍🗨
     "\U0001f441\U0001f5e8": "\U0001f441\u200d\U0001f5e8",
+}
+
+# A list of keycap emoji sequences indexed by the no VS16 sequence.
+# Details: http://unicode.org/emoji/charts/emoji-sequences.html
+# Structure: base character + U+20E3 (COMBINING ENCLOSING KEYCAP)
+# VS16 (fe0f) is inserted between the base character and the keycap.
+KEYCAP_SEQUENCES = {
+    # Digit keycaps: 0️⃣ ~ 9️⃣
+    '0\u20e3': '0\ufe0f\u20e3',   # 0️⃣
+    '1\u20e3': '1\ufe0f\u20e3',   # 1️⃣
+    '2\u20e3': '2\ufe0f\u20e3',   # 2️⃣
+    '3\u20e3': '3\ufe0f\u20e3',   # 3️⃣
+    '4\u20e3': '4\ufe0f\u20e3',   # 4️⃣
+    '5\u20e3': '5\ufe0f\u20e3',   # 5️⃣
+    '6\u20e3': '6\ufe0f\u20e3',   # 6️⃣
+    '7\u20e3': '7\ufe0f\u20e3',   # 7️⃣
+    '8\u20e3': '8\ufe0f\u20e3',   # 8️⃣
+    '9\u20e3': '9\ufe0f\u20e3',   # 9️⃣
+    # Special character keycaps
+    '#\u20e3': '#\ufe0f\u20e3',   # #️⃣
+    '*\u20e3': '*\ufe0f\u20e3',   # *️⃣
 }
